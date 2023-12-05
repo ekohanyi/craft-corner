@@ -7,6 +7,8 @@ class PixelArt {
 		this.ctx.lineWidth = 1;
 		this.ctx.lineJoin = 'miter';
 		this.ctx.lineCap = 'square'
+		this.desktopColor = '#F8F9FA'
+		this.legColor = '#826C7F';
 	}
 
 	drawShelf = () => {
@@ -16,11 +18,13 @@ class PixelArt {
 			length: 60,
 			height: 7,
 			legHeight: 5,
+			legOffset: 3,
 		};
 
 		const style = {
-			legColor: 'cyan',
-			desktopColor: 'orange'
+			legColor: this.legColor,
+			desktopColor: this.desktopColor,
+			hasShadow: true,
 		}
 
 		new Surface(this.ctx, dimensions, style).draw()
@@ -36,8 +40,8 @@ class PixelArt {
 		};
 
 		const style = {
-			legColor: 'gray',
-			desktopColor: 'red'
+			legColor: this.legColor,
+			desktopColor: this.desktopColor
 		}
 
 		new Surface(this.ctx, dimensions, style).draw()

@@ -6,9 +6,11 @@ class Surface {
 		this.length = dimensions.length;
 		this.height = dimensions.height;
 		this.legHeight = dimensions.legHeight;
+		this.legOffset = dimensions.legOffset || 0;
 
 		this.legColor = style.legColor;
 		this.desktopColor = style.desktopColor;
+		this.hasShadow = !!style.hasShadow;
 	}
 
 	drawLine = ({ startX, startY, endX, endY }) => {
@@ -20,7 +22,7 @@ class Surface {
 	}
 
 	drawTopLeftLeg = () => {
-		const startX = this.initX;
+		const startX = this.initX + this.legOffset;
 		const startY = this.initY;
 		const endY = this.initY + this.legHeight;
 
@@ -28,7 +30,7 @@ class Surface {
 	}
 
 	drawTopRightLeg = () => {
-		const startX = this.initX + this.length;
+		const startX = this.initX + this.length - this.legOffset;
 		const startY = this.initY;
 		const endY = this.initY + this.legHeight;
 
@@ -36,7 +38,7 @@ class Surface {
 	}
 
 	drawBottomRightLeg = () => {
-		const startX = this.initX + this.length - this.height + 1;
+		const startX = this.initX + this.length - this.height + 1 - this.legOffset;
 		const startY = this.initY + this.height;
 		const endY = this.initY + this.height + this.legHeight;
 
@@ -44,7 +46,7 @@ class Surface {
 	}
 
 	drawBottomLeftLeg = () => {
-		const startX = this.initX - this.height + 1;
+		const startX = this.initX - this.height + 1 + this.legOffset;
 		const startY = this.initY + this.height;
 		const endY = this.initY + this.height + this.legHeight;
 
@@ -56,6 +58,20 @@ class Surface {
 		this.drawTopRightLeg();
 		this.drawBottomRightLeg();
 		this.drawBottomLeftLeg();
+	}
+
+	drawTopShadow = () => {
+		if (!this.hasShadow) return;
+
+		this.ctx.strokeStyle = "#E9ECEF"
+		for (let i = 0; i < this.height; i++) {
+			this.drawLine({
+				startX: this.initX - i,
+				startY: this.initY + this.height - 1 + i,
+				endX: this.initX - i + this.length,
+				endY: this.initY + this.height - 1 + i
+			})
+		}
 	}
 
 	drawTop = () => {
@@ -70,6 +86,8 @@ class Surface {
 	}
 
 	draw = () => {
+		this.drawTopShadow();
+
 		this.ctx.strokeStyle = this.legColor;
 		this.drawLegs()
 
